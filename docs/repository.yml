@@ -1,0 +1,10 @@
+---
+name: Docker Hadolint
+slug: docker-hadolint
+project: cardboardci
+namespace: []
+description: Dockerfile linter, validate inline bash, written in Haskell
+license:
+  name: MIT
+tags:
+  - docker
