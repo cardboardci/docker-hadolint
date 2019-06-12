@@ -19,3 +19,30 @@ shellcheck:
   image: cardboardci/shellcheck:0.6.0
   script:
     - shellcheck provision/*.sh
+
+##
+## Build
+##
+build:
+  stage: "Build"
+  script:
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" .
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
+    - docker push "$CI_REGISTRY_IMAGE"
+
+##
+## Deploy
+##
+docker.hub:
+  stage: "Deploy"
+  script:
+    - source deploy/hub.docker.config
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
+    - docker pull "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
+    - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" "docker.io/${HUB_NAMESPACE}/${HUB_PROJECT}:edge"
+    - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" "docker.io/${HUB_NAMESPACE}/${HUB_PROJECT}:1.15.0"
+    - echo "$HUB_REGISTRY_PASSWORD" | docker login -u "$HUB_REGISTRY_USER" --password-stdin
+    - docker push "docker.io/${HUB_NAMESPACE}/${HUB_PROJECT}:edge"
+    - docker push "docker.io/${HUB_NAMESPACE}/${HUB_PROJECT}:1.15.0"
+  only:
+    - master
