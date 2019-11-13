@@ -1,7 +1,18 @@
-FROM hadolint/hadolint:v1.15.0 AS official 
-FROM alpine:3.10.3
-COPY --from=official /bin/hadolint /bin/hadolint
+FROM cardboardci/ci-core:latest
+USER root
 
+ARG VERSION=v1.17.2
+
+COPY provision/pkglist /cardboardci/pkglist
+RUN apt-get update \
+    && xargs -a /cardboardci/pkglist apt-get install -y \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+ADD https://github.com/lukasmartinelli/hadolint/releases/download/v${VERSION}/hadolint_linux_amd64 /usr/bin/hadolint
+RUN chmod +x /usr/bin/hadolint
+
+USER cardboardci
 ##
 ## Image Metadata
 ##
