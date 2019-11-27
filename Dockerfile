@@ -1,5 +1,7 @@
-FROM cardboardci/ci-core:latest
+FROM cardboardci/ci-core:focal
 USER root
+
+ARG DEBIAN_FRONTEND=noninteractive
 
 ARG VERSION=v1.17.2
 

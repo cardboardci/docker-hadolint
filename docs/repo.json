@@ -1,8 +1,0 @@
-{
-  "name": "docker-hadolint",
-  "tagline": "Dockerfile linter, validate inline bash, written in Haskell.",
-  "license": {
-    "name": "MIT"
-  },
-  "tags": ["docker", "hadolint", "lint"]
-}
