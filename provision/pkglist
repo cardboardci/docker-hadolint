@@ -1,3 +1,2 @@
-wget
-libgmp10
-ca-certificates
+curl=7.66.0-1ubuntu1
+libgmp10=2:6.1.2+dfsg-4

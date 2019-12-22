@@ -1,4 +1,4 @@
-FROM cardboardci/ci-core:focal
+FROM cardboardci/ci-core@sha256:5b93f4c8cc1ddaa809f9c27d0a865a974ccb43e5e3d38334df1b0d77ea1843fb
 USER root
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -11,8 +11,10 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ADD https://github.com/lukasmartinelli/hadolint/releases/download/v${VERSION}/hadolint_linux_amd64 /usr/bin/hadolint
-RUN chmod +x /usr/bin/hadolint
+RUN curl -sSL \
+    "https://github.com/hadolint/hadolint/releases/download/v${VERSION}/hadolint-Linux-x86_64" \
+    -o /usr/bin/hadolint \
+    && chmod +x /usr/bin/hadolint
 
 USER cardboardci
 ##
