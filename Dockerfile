@@ -11,8 +11,10 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-ADD https://github.com/lukasmartinelli/hadolint/releases/download/v${VERSION}/hadolint_linux_amd64 /usr/bin/hadolint
-RUN chmod +x /usr/bin/hadolint
+RUN curl -sSL \
+    "https://github.com/hadolint/hadolint/releases/download/v${VERSION}/hadolint-Linux-x86_64" \
+    -o /usr/bin/hadolint \
+    && chmod +x /usr/bin/hadolint
 
 USER cardboardci
 ##
